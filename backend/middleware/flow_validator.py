@@ -1,16 +1,17 @@
-from fastapi import Request, HTTPException
+from fastapi import Request
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models.models_session import SessionActivity
 
-VALID_FLOW = {
-    "search": ["select"],
-    "select": ["confirm"],
-    "confirm": ["pay"],
-    "pay": []
-}
+FLOW_ORDER = ["/", "search", "select", "confirm", "pay"]
+FLOW_INDEX = {action: i for i, action in enumerate(FLOW_ORDER)}
+
+SAFE_ENDPOINTS = {"/","/favicon.ico", "/docs", "/redoc", "/openapi.json"}
 
 def get_action_from_path(path: str):
+    if path == "/":
+        return "/"
     if path == "/search":
         return "search"
     if path == "/select-seat":
@@ -21,16 +22,22 @@ def get_action_from_path(path: str):
         return "pay"
     return None
 
-
 async def flow_validator_middleware(request: Request, call_next):
-    action = get_action_from_path(request.url.path)
+    path = request.url.path
 
+    if path in SAFE_ENDPOINTS:
+        return await call_next(request)
+
+    action = get_action_from_path(path)
     if not action:
         return await call_next(request)
 
     session_id = request.cookies.get("session_id")
     if not session_id:
-        raise HTTPException(status_code=400, detail="Session missing")
+        return JSONResponse(
+            status_code=400,
+            content={"detail": "Session missing"}
+        )
 
     db: Session = SessionLocal()
 
@@ -42,17 +49,28 @@ async def flow_validator_middleware(request: Request, call_next):
     )
 
     if last:
-        allowed = VALID_FLOW.get(last.action, [])
-        if action not in allowed:
+        prev_idx = FLOW_INDEX.get(last.action, -1)
+        curr_idx = FLOW_INDEX.get(action, -1)
+
+        # ✅ Allow refresh
+        if curr_idx == prev_idx:
+            pass
+
+        # ✅ Allow backward navigation
+        elif curr_idx < prev_idx:
+            pass
+
+        # ❌ Hard block: Jumping straight to payment
+        elif curr_idx - prev_idx > 1:
             db.close()
-            raise HTTPException(
+            return JSONResponse(
                 status_code=403,
-                detail="Invalid booking flow detected"
+                content={"detail": "Suspicious booking flow detected"}
             )
 
     db.add(SessionActivity(
         session_id=session_id,
-        ip_address=request.client.host,
+        ip_address=request.client.host if request.client else None,
         action=action
     ))
     db.commit()

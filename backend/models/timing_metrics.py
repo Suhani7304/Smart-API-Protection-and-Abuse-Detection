@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime
-from sqlalchemy.sql import func
+from datetime import datetime
 from database import Base
 
 class TimingMetrics(Base):
@@ -10,4 +10,4 @@ class TimingMetrics(Base):
     action = Column(String(50))
     delta_ms = Column(Float)
     risk_score = Column(Integer)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime, default=datetime.utcnow)

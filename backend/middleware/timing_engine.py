@@ -5,7 +5,7 @@ from database import SessionLocal
 from models.timing_metrics import TimingMetrics
 from models.models_session import SessionActivity
 import time
-
+from middleware.risk_aggregator import add_risk
 
 FAST_ACTION_THRESHOLD_MS = 300
 LOW_VARIANCE_THRESHOLD = 50
@@ -31,6 +31,7 @@ def analyze_timing(deltas: list[float]) -> int:
 async def timing_engine_middleware(request: Request, call_next):
     response = await call_next(request)
     session_id = request.cookies.get("session_id")
+    ip = request.client.host if request.client else "unknown"
     if not session_id:
         return response
     
@@ -52,6 +53,14 @@ async def timing_engine_middleware(request: Request, call_next):
         deltas.append(abs(delta))
 
     risk = analyze_timing(deltas)
+
+    if risk>0:
+        add_risk(
+            session_id=session_id,
+            ip=ip,
+            points=risk
+        )
+
     metric = TimingMetrics(
         session_id=session_id,
         action=actions[0].action,

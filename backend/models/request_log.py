@@ -1,12 +1,12 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, Float
-from datetime import datetime 
+from sqlalchemy import Column, Integer, String, DateTime, Text, Float, func
+from datetime import datetime
 from database import Base
 
 class APIRequestLog(Base):
     __tablename__ = "api_requests"
 
     id = Column(Integer, primary_key=True, index=True)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime, server_default=func.now(), nullable=False)
     ip_address = Column(String(45))
     method = Column(String(10))
     endpoint = Column(String(255))

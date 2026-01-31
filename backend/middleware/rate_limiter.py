@@ -2,6 +2,7 @@ import time
 from fastapi import Request, HTTPException
 from collections import defaultdict, deque
 from fastapi.responses import JSONResponse
+from middleware.risk_aggregator import add_risk
 
 # { (ip,endpoint): dequeu([timestamp])}
 request_store = defaultdict(deque) #means if key not present, python creates a deque
@@ -32,9 +33,10 @@ async def rate_limiter_middleware(request: Request, call_next):
         timestamps.popleft()
 
     if len(timestamps) >= max_requests:
-        return JSONResponse(
-            status_code=429,
-            content={"detail": "Rate limit exceeded. Try again later."}
+        add_risk(
+            session_id=request.cookies.get("session_id"),
+            ip=client_ip,
+            points=25
         )
     timestamps.append(now)
     response = await call_next(request)

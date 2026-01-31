@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models.models_session import SessionActivity
+from middleware.risk_aggregator import add_risk
 
 FLOW_ORDER = ["/", "search", "select", "confirm", "pay"]
 FLOW_INDEX = {action: i for i, action in enumerate(FLOW_ORDER)}
@@ -62,10 +63,10 @@ async def flow_validator_middleware(request: Request, call_next):
 
         # ❌ Hard block: Jumping straight to payment
         elif curr_idx - prev_idx > 1:
-            db.close()
-            return JSONResponse(
-                status_code=403,
-                content={"detail": "Suspicious booking flow detected"}
+            add_risk(
+                session_id=session_id,
+                ip=request.client.host,
+                points=40
             )
 
     db.add(SessionActivity(

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, func
 from datetime import datetime
 from database import Base
 
@@ -9,4 +9,4 @@ class SessionActivity(Base):
     session_id = Column(String(100))
     ip_address = Column(String(45))
     action = Column(String(50))
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime, server_default=func.now(), nullable=False)

@@ -25,7 +25,7 @@ async def response_engine_middleware(request: Request, call_next):
 
     if not risk:
         return await call_next(request)
-    
+      
     score = risk.risk_score
 
     if score >= BLOCK_LIMIT:

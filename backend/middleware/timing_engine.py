@@ -49,9 +49,18 @@ async def timing_engine_middleware(request: Request, call_next):
 
     deltas = []
     for i in range(len(actions)-1):
-        delta = (actions[i].timestamp - actions[i+1].timestamp).total_seconds()*1000
+        t1 = actions[i].timestamp
+        t2 = actions[i + 1].timestamp
+
+        if t1 is None or t2 is None:
+            continue  
+        delta = (t1 - t2).total_seconds() * 1000
         deltas.append(abs(delta))
 
+    if not deltas:
+        db.close()
+        return response
+    
     risk = analyze_timing(deltas)
 
     if risk>0:

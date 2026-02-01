@@ -5,7 +5,7 @@ from models.session_risk import SessionRisk
 def add_risk(session_id: str, ip: str, points: int):
     db: Session = SessionLocal()
 
-    risk = db.query(SessionRisk).filter(session_id=session_id).first()
+    risk = db.query(SessionRisk).filter_by(session_id=session_id).first()
 
     if not risk:
         risk = SessionRisk(

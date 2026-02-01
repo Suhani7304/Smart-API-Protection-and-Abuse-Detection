@@ -6,6 +6,7 @@ from middleware.rate_limiter import rate_limiter_middleware
 from middleware.flow_validator import flow_validator_middleware
 from middleware.session_manager import session_middleware
 from middleware.timing_engine import timing_engine_middleware
+from middleware.response_engine import response_engine_middleware
 
 app = FastAPI()
 
@@ -27,6 +28,10 @@ async def flow_check(request: Request, call_next):
 @app.middleware("http")
 async def timing_engine(request: Request, call_next):
     return await timing_engine_middleware(request, call_next)
+
+@app.middleware("http")
+async def response_engine(request: Request, call_next):
+    return await response_engine_middleware(request, call_next)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):

@@ -114,9 +114,10 @@ Final Response
 
 ## 🧰 Tech Stack
 
-- **Backend:** (FastAPI / Flask)
+- **Backend:** FastAPI
 - **Language:** Python
-- **Database:** (MySQL / Redis if used)
+- **Database:** MySQL
+- **ORM:** SQLAlchemy  
 - **Architecture:** Middleware-based pipeline
 
 ---

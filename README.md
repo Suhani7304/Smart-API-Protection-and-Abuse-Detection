@@ -32,7 +32,7 @@ Instead of validating requests individually, this system:
 ```markdown
 ## 🏗️ Architecture (Detailed View)
 
-```text
+
                 ┌──────────────────────┐
                 │   Risk Aggregator    │
                 │  (Shared Component)  │

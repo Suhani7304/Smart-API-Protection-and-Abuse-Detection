@@ -1,8 +1,8 @@
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.session_risk import SessionRisk
+from ..database import SessionLocal
+from ..models.session_risk import SessionRisk
 import asyncio
 
 

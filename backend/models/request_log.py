@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, Text, Float, func
 from datetime import datetime
-from database import Base
+from ..database import Base
 
+# store each request info
 class APIRequestLog(Base):
     __tablename__ = "api_requests"
 

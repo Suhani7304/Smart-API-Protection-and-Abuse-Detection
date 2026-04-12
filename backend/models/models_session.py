@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
 from datetime import datetime
-from database import Base
+from ..database import Base
 
+# store session info
 class SessionActivity(Base):
     __tablename__ = "session_activity"
 

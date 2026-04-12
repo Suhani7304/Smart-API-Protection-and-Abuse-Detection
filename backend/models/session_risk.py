@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
 from datetime import datetime
-from database import Base
+from ..database import Base
 
+# stores risk for each ip and system responds acc to that
 class SessionRisk(Base):
     __tablename__ = "session_risk"
 

@@ -1,11 +1,11 @@
 import statistics
 from fastapi import Request
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.timing_metrics import TimingMetrics
-from models.models_session import SessionActivity
+from ..database import SessionLocal
+from ..models.timing_metrics import TimingMetrics
+from ..models.models_session import SessionActivity
 import time
-from middleware.risk_aggregator import add_risk
+from ..middleware.risk_aggregator import add_risk
 
 FAST_ACTION_THRESHOLD_MS = 300
 LOW_VARIANCE_THRESHOLD = 50

@@ -2,7 +2,7 @@ import time
 from fastapi import Request, HTTPException
 from collections import defaultdict, deque
 from fastapi.responses import JSONResponse
-from middleware.risk_aggregator import add_risk
+from ..middleware.risk_aggregator import add_risk
 
 # { (ip,endpoint): dequeu([timestamp])}
 request_store = defaultdict(deque) 

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.session_risk import SessionRisk
+from ..database import SessionLocal
+from ..models.session_risk import SessionRisk
 
 def add_risk(session_id: str, ip: str, points: int):
     db: Session = SessionLocal()

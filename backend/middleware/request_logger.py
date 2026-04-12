@@ -1,8 +1,8 @@
 import time
 from fastapi import Request
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.request_log import APIRequestLog
+from ..database import SessionLocal
+from ..models.request_log import APIRequestLog
 
 IGNORED_PATHS = {
     "/favicon.ico",

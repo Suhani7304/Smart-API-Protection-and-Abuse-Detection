@@ -1,9 +1,9 @@
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.models_session import SessionActivity
-from middleware.risk_aggregator import add_risk
+from ..database import SessionLocal
+from ..models.models_session import SessionActivity
+from .risk_aggregator import add_risk
 
 FLOW_ORDER = ["/", "search", "select", "confirm", "pay"]
 FLOW_INDEX = {action: i for i, action in enumerate(FLOW_ORDER)}

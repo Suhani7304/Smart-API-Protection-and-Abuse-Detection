@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime, func
 from datetime import datetime
-from database import Base
+from ..database import Base
 
+# it stores the time taken between diff requests
 class TimingMetrics(Base):
     __tablename__ = "timing_metrics"
 

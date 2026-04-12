@@ -54,7 +54,7 @@ Request Logger            ┤
 Response Engine ◄─────────┘
       ▼
 Final Response
-
+```
 
 ---
 

@@ -29,24 +29,30 @@ Instead of validating requests individually, this system:
 
 ---
 
-## 🏗️ Architecture
+```markdown
+## 🏗️ Architecture (Detailed View)
 
-Incoming Request
-↓
-Flow Validator
-↓
-Rate Limiter
-↓
-Request Logger
-↓
-Session Manager
-↓
-Timing Engine
-↓
-Risk Aggregator
-↓
-Response Engine
-↓
+```text
+                ┌──────────────────────┐
+                │   Risk Aggregator    │
+                │  (Shared Component)  │
+                └─────────▲────────────┘
+                          │
+Incoming Request          │
+      │                   │
+      ▼                   │
+Session Manager           ┤
+      ▼                   │
+Rate Limiter ─────────────┤
+      ▼                   │
+Flow Validator ───────────┤
+      ▼                   │
+Timing Engine ────────────┤
+      ▼                   │
+Request Logger            ┤
+      ▼                   │
+Response Engine ◄─────────┘
+      ▼
 Final Response
 
 

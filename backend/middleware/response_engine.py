@@ -5,8 +5,8 @@ from database import SessionLocal
 from models.session_risk import SessionRisk
 import asyncio
 
-SOFT_LIMIT = 30
-HARD_LIMIT = 60
+
+HARD_LIMIT = 50
 BLOCK_LIMIT = 100
 
 async def response_engine_middleware(request: Request, call_next):
@@ -34,7 +34,7 @@ async def response_engine_middleware(request: Request, call_next):
             content={"detail":"Too many suspicious actions detected"}
         )
     
-    if score >= SOFT_LIMIT:
+    if score >= HARD_LIMIT:
         await asyncio.sleep(2)
 
     return await call_next(request)

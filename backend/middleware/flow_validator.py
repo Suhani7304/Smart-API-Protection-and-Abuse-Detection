@@ -53,15 +53,15 @@ async def flow_validator_middleware(request: Request, call_next):
         prev_idx = FLOW_INDEX.get(last.action, -1)
         curr_idx = FLOW_INDEX.get(action, -1)
 
-        # ✅ Allow refresh
+        #refresh
         if curr_idx == prev_idx:
             pass
 
-        # ✅ Allow backward navigation
+        #backward navigation
         elif curr_idx < prev_idx:
             pass
 
-        # ❌ Hard block: Jumping straight to payment
+        # Jumping bw pages
         elif curr_idx - prev_idx > 1:
             add_risk(
                 session_id=session_id,

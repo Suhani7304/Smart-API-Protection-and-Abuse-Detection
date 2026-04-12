@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from middleware.risk_aggregator import add_risk
 
 # { (ip,endpoint): dequeu([timestamp])}
-request_store = defaultdict(deque) #means if key not present, python creates a deque
+request_store = defaultdict(deque) 
 
 RATE_LIMITS = {
     "/health" : {"max_requests":30, "window": 60},
